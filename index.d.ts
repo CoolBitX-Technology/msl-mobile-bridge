@@ -1,0 +1,1401 @@
+export type Optional<T> = T | undefined;
+
+export class Ptr {
+  /**
+    * Frees the pointer
+    * @returns {Promise<void>}
+    */
+  free(): Promise<void>;
+}
+
+export class BigNum extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<BigNum>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<BigNum>;
+
+  /**
+  * @param {string} string
+  * @returns {Promise<BigNum>}
+  */
+  static from_str: (string: string) => Promise<BigNum>;
+
+  /**
+  * @returns {Promise<string>}
+  */
+  to_str: () => Promise<string>;
+
+  /**
+  * @param {BigNum} other
+  * @returns {Promise<BigNum>}
+  */
+  checked_mul: (other: BigNum) => Promise<BigNum>;
+
+  /**
+  * @param {BigNum} other
+  * @returns {Promise<BigNum>}
+  */
+  checked_add: (other: BigNum) => Promise<BigNum>;
+
+  /**
+  * @param {BigNum} other
+  * @returns {Promise<BigNum>}
+  */
+  checked_sub: (other: BigNum) => Promise<BigNum>;
+
+}
+
+
+export class CBORArray extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<CBORArray>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<CBORArray>;
+
+  /**
+  * @returns {Promise<CBORArray>}
+  */
+  static new: () => Promise<CBORArray>;
+
+  /**
+  * @returns {Promise<number>}
+  */
+  len: () => Promise<number>;
+
+  /**
+  * @param {number} index
+  * @returns {Promise<CBORValue>}
+  */
+  get: (index: number) => Promise<CBORValue>;
+
+  /**
+  * @param {CBORValue} elem
+  */
+  add: (elem: CBORValue) => Promise<void>;
+
+  /**
+  * @param {boolean} use_definite
+  */
+  set_definite_encoding: (use_definite: boolean) => Promise<void>;
+
+  /**
+  * @returns {Promise<boolean>}
+  */
+  is_definite: () => Promise<boolean>;
+
+}
+
+
+export class CBORObject extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<CBORObject>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<CBORObject>;
+
+  /**
+  * @returns {Promise<CBORObject>}
+  */
+  static new: () => Promise<CBORObject>;
+
+  /**
+  * @returns {Promise<number>}
+  */
+  len: () => Promise<number>;
+
+  /**
+  * @param {CBORValue} key
+  * @param {CBORValue} value
+  * @returns {Promise<Optional<CBORValue>>}
+  */
+  insert: (key: CBORValue, value: CBORValue) => Promise<Optional<CBORValue>>;
+
+  /**
+  * @param {CBORValue} key
+  * @returns {Promise<Optional<CBORValue>>}
+  */
+  get: (key: CBORValue) => Promise<Optional<CBORValue>>;
+
+  /**
+  * @returns {Promise<CBORArray>}
+  */
+  keys: () => Promise<CBORArray>;
+
+  /**
+  * @param {boolean} use_definite
+  */
+  set_definite_encoding: (use_definite: boolean) => Promise<void>;
+
+  /**
+  * @returns {Promise<boolean>}
+  */
+  is_definite: () => Promise<boolean>;
+
+}
+
+
+export class CBORSpecial extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<CBORSpecial>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<CBORSpecial>;
+
+  /**
+  * @param {boolean} b
+  * @returns {Promise<CBORSpecial>}
+  */
+  static new_bool: (b: boolean) => Promise<CBORSpecial>;
+
+  /**
+  * @param {number} u
+  * @returns {Promise<CBORSpecial>}
+  */
+  static new_unassigned: (u: number) => Promise<CBORSpecial>;
+
+  /**
+  * @returns {Promise<CBORSpecial>}
+  */
+  static new_break: () => Promise<CBORSpecial>;
+
+  /**
+  * @returns {Promise<CBORSpecial>}
+  */
+  static new_null: () => Promise<CBORSpecial>;
+
+  /**
+  * @returns {Promise<CBORSpecial>}
+  */
+  static new_undefined: () => Promise<CBORSpecial>;
+
+  /**
+  * @returns {Promise<CBORSpecialType>}
+  */
+  kind: () => Promise<CBORSpecialType>;
+
+  /**
+  * @returns {Promise<Optional<boolean>>}
+  */
+  as_bool: () => Promise<Optional<boolean>>;
+
+  /**
+  * @returns {Promise<Optional<number>>}
+  */
+  as_float: () => Promise<Optional<number>>;
+
+  /**
+  * @returns {Promise<Optional<number>>}
+  */
+  as_unassigned: () => Promise<Optional<number>>;
+
+}
+
+
+export class CBORValue extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<CBORValue>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<CBORValue>;
+
+  /**
+  * @param {Int} int_value
+  * @returns {Promise<CBORValue>}
+  */
+  static new_int: (int_value: Int) => Promise<CBORValue>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<CBORValue>}
+  */
+  static new_bytes: (bytes: Uint8Array) => Promise<CBORValue>;
+
+  /**
+  * @param {string} text
+  * @returns {Promise<CBORValue>}
+  */
+  static new_text: (text: string) => Promise<CBORValue>;
+
+  /**
+  * @param {CBORArray} arr
+  * @returns {Promise<CBORValue>}
+  */
+  static new_array: (arr: CBORArray) => Promise<CBORValue>;
+
+  /**
+  * @param {CBORObject} obj
+  * @returns {Promise<CBORValue>}
+  */
+  static new_object: (obj: CBORObject) => Promise<CBORValue>;
+
+  /**
+  * @param {TaggedCBOR} tagged
+  * @returns {Promise<CBORValue>}
+  */
+  static new_tagged: (tagged: TaggedCBOR) => Promise<CBORValue>;
+
+  /**
+  * @param {CBORSpecial} special
+  * @returns {Promise<CBORValue>}
+  */
+  static new_special: (special: CBORSpecial) => Promise<CBORValue>;
+
+  /**
+  * @param {Label} label
+  * @returns {Promise<CBORValue>}
+  */
+  static from_label: (label: Label) => Promise<CBORValue>;
+
+  /**
+  * @returns {Promise<CBORValueKind>}
+  */
+  kind: () => Promise<CBORValueKind>;
+
+  /**
+  * @returns {Promise<Optional<Int>>}
+  */
+  as_int: () => Promise<Optional<Int>>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  as_bytes: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @returns {Promise<Optional<string>>}
+  */
+  as_text: () => Promise<Optional<string>>;
+
+  /**
+  * @returns {Promise<Optional<CBORArray>>}
+  */
+  as_array: () => Promise<Optional<CBORArray>>;
+
+  /**
+  * @returns {Promise<Optional<CBORObject>>}
+  */
+  as_object: () => Promise<Optional<CBORObject>>;
+
+  /**
+  * @returns {Promise<Optional<TaggedCBOR>>}
+  */
+  as_tagged: () => Promise<Optional<TaggedCBOR>>;
+
+  /**
+  * @returns {Promise<Optional<CBORSpecial>>}
+  */
+  as_special: () => Promise<Optional<CBORSpecial>>;
+
+}
+
+
+export class COSEEncrypt extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSEEncrypt>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSEEncrypt>;
+
+  /**
+  * @returns {Promise<Headers>}
+  */
+  headers: () => Promise<Headers>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  ciphertext: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @returns {Promise<COSERecipients>}
+  */
+  recipients: () => Promise<COSERecipients>;
+
+  /**
+  * @param {Headers} headers
+  * @param {Optional<Uint8Array>} ciphertext
+  * @param {COSERecipients} recipients
+  * @returns {Promise<COSEEncrypt>}
+  */
+  static new: (headers: Headers, ciphertext: Optional<Uint8Array>, recipients: COSERecipients) => Promise<COSEEncrypt>;
+
+}
+
+
+export class COSEEncrypt0 extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSEEncrypt0>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSEEncrypt0>;
+
+  /**
+  * @returns {Promise<Headers>}
+  */
+  headers: () => Promise<Headers>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  ciphertext: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @param {Headers} headers
+  * @param {Optional<Uint8Array>} ciphertext
+  * @returns {Promise<COSEEncrypt0>}
+  */
+  static new: (headers: Headers, ciphertext: Optional<Uint8Array>) => Promise<COSEEncrypt0>;
+
+}
+
+
+export class COSEKey extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSEKey>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSEKey>;
+
+  /**
+  * @param {Label} key_type
+  */
+  set_key_type: (key_type: Label) => Promise<void>;
+
+  /**
+  * @returns {Promise<Label>}
+  */
+  key_type: () => Promise<Label>;
+
+  /**
+  * @param {Uint8Array} key_id
+  */
+  set_key_id: (key_id: Uint8Array) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  key_id: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @param {Label} algorithm_id
+  */
+  set_algorithm_id: (algorithm_id: Label) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Label>>}
+  */
+  algorithm_id: () => Promise<Optional<Label>>;
+
+  /**
+  * @param {Labels} key_ops
+  */
+  set_key_ops: (key_ops: Labels) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Labels>>}
+  */
+  key_ops: () => Promise<Optional<Labels>>;
+
+  /**
+  * @param {Uint8Array} base_init_vector
+  */
+  set_base_init_vector: (base_init_vector: Uint8Array) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  base_init_vector: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @param {Label} label
+  * @returns {Promise<Optional<CBORValue>>}
+  */
+  header: (label: Label) => Promise<Optional<CBORValue>>;
+
+  /**
+  * @param {Label} label
+  * @param {CBORValue} value
+  * @returns {Promise<void>}
+  */
+  set_header: (label: Label, value: CBORValue) => Promise<void>;
+
+  /**
+  * @param {Label} key_type
+  * @returns {Promise<COSEKey>}
+  */
+  static new: (key_type: Label) => Promise<COSEKey>;
+
+}
+
+
+export class COSERecipient extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSERecipient>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSERecipient>;
+
+  /**
+  * @returns {Promise<Headers>}
+  */
+  headers: () => Promise<Headers>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  ciphertext: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @param {Headers} headers
+  * @param {Optional<Uint8Array>} ciphertext
+  * @returns {Promise<COSERecipient>}
+  */
+  static new: (headers: Headers, ciphertext: Optional<Uint8Array>) => Promise<COSERecipient>;
+
+}
+
+
+export class COSERecipients extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSERecipients>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSERecipients>;
+
+  /**
+  * @returns {Promise<COSERecipients>}
+  */
+  static new: () => Promise<COSERecipients>;
+
+  /**
+  * @returns {Promise<number>}
+  */
+  len: () => Promise<number>;
+
+  /**
+  * @param {number} index
+  * @returns {Promise<COSERecipient>}
+  */
+  get: (index: number) => Promise<COSERecipient>;
+
+  /**
+  * @param {COSERecipient} elem
+  */
+  add: (elem: COSERecipient) => Promise<void>;
+
+}
+
+
+export class COSESign extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSESign>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSESign>;
+
+  /**
+  * @returns {Promise<Headers>}
+  */
+  headers: () => Promise<Headers>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  payload: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @returns {Promise<COSESignatures>}
+  */
+  signatures: () => Promise<COSESignatures>;
+
+  /**
+  * @param {Headers} headers
+  * @param {Optional<Uint8Array>} payload
+  * @param {COSESignatures} signatures
+  * @returns {Promise<COSESign>}
+  */
+  static new: (headers: Headers, payload: Optional<Uint8Array>, signatures: COSESignatures) => Promise<COSESign>;
+
+}
+
+
+export class COSESign1 extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSESign1>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSESign1>;
+
+  /**
+  * @returns {Promise<Headers>}
+  */
+  headers: () => Promise<Headers>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  payload: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  signature: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Optional<Uint8Array>} external_aad
+  * @param {Optional<Uint8Array>} external_payload
+  * @returns {Promise<SigStructure>}
+  */
+  signed_data: (external_aad: Optional<Uint8Array>, external_payload: Optional<Uint8Array>) => Promise<SigStructure>;
+
+  /**
+  * @param {Headers} headers
+  * @param {Optional<Uint8Array>} payload
+  * @param {Uint8Array} signature
+  * @returns {Promise<COSESign1>}
+  */
+  static new: (headers: Headers, payload: Optional<Uint8Array>, signature: Uint8Array) => Promise<COSESign1>;
+
+}
+
+
+export class COSESign1Builder extends Ptr {
+  /**
+  * @param {Headers} headers
+  * @param {Uint8Array} payload
+  * @param {boolean} is_payload_external
+  * @returns {Promise<COSESign1Builder>}
+  */
+  static new: (headers: Headers, payload: Uint8Array, is_payload_external: boolean) => Promise<COSESign1Builder>;
+
+  /**
+  */
+  hash_payload: () => Promise<void>;
+
+  /**
+  * @param {Uint8Array} external_aad
+  */
+  set_external_aad: (external_aad: Uint8Array) => Promise<void>;
+
+  /**
+  * @returns {Promise<SigStructure>}
+  */
+  make_data_to_sign: () => Promise<SigStructure>;
+
+  /**
+  * @param {Uint8Array} signed_sig_structure
+  * @returns {Promise<COSESign1>}
+  */
+  build: (signed_sig_structure: Uint8Array) => Promise<COSESign1>;
+
+}
+
+
+export class COSESignBuilder extends Ptr {
+  /**
+  * @param {Headers} headers
+  * @param {Uint8Array} payload
+  * @param {boolean} is_payload_external
+  * @returns {Promise<COSESignBuilder>}
+  */
+  static new: (headers: Headers, payload: Uint8Array, is_payload_external: boolean) => Promise<COSESignBuilder>;
+
+  /**
+  */
+  hash_payload: () => Promise<void>;
+
+  /**
+  * @param {Uint8Array} external_aad
+  */
+  set_external_aad: (external_aad: Uint8Array) => Promise<void>;
+
+  /**
+  * @returns {Promise<SigStructure>}
+  */
+  make_data_to_sign: () => Promise<SigStructure>;
+
+  /**
+  * @param {COSESignatures} signed_sig_structure
+  * @returns {Promise<COSESign>}
+  */
+  build: (signed_sig_structure: COSESignatures) => Promise<COSESign>;
+
+}
+
+
+export class COSESignature extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSESignature>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSESignature>;
+
+  /**
+  * @returns {Promise<Headers>}
+  */
+  headers: () => Promise<Headers>;
+
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  signature: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Headers} headers
+  * @param {Uint8Array} signature
+  * @returns {Promise<COSESignature>}
+  */
+  static new: (headers: Headers, signature: Uint8Array) => Promise<COSESignature>;
+
+}
+
+
+export class COSESignatures extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<COSESignatures>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<COSESignatures>;
+
+  /**
+  * @returns {Promise<COSESignatures>}
+  */
+  static new: () => Promise<COSESignatures>;
+
+  /**
+  * @returns {Promise<number>}
+  */
+  len: () => Promise<number>;
+
+  /**
+  * @param {number} index
+  * @returns {Promise<COSESignature>}
+  */
+  get: (index: number) => Promise<COSESignature>;
+
+  /**
+  * @param {COSESignature} elem
+  */
+  add: (elem: COSESignature) => Promise<void>;
+
+}
+
+
+export class CounterSignature extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<CounterSignature>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<CounterSignature>;
+
+  /**
+  * @param {COSESignature} cose_signature
+  * @returns {Promise<CounterSignature>}
+  */
+  static new_single: (cose_signature: COSESignature) => Promise<CounterSignature>;
+
+  /**
+  * @param {COSESignatures} cose_signatures
+  * @returns {Promise<CounterSignature>}
+  */
+  static new_multi: (cose_signatures: COSESignatures) => Promise<CounterSignature>;
+
+  /**
+  * @returns {Promise<COSESignatures>}
+  */
+  signatures: () => Promise<COSESignatures>;
+
+}
+
+
+export class EdDSA25519Key extends Ptr {
+  /**
+  * @param {Uint8Array} pubkey_bytes
+  * @returns {Promise<EdDSA25519Key>}
+  */
+  static new: (pubkey_bytes: Uint8Array) => Promise<EdDSA25519Key>;
+
+  /**
+  * @param {Uint8Array} private_key_bytes
+  */
+  set_private_key: (private_key_bytes: Uint8Array) => Promise<void>;
+
+  /**
+  */
+  is_for_signing: () => Promise<void>;
+
+  /**
+  */
+  is_for_verifying: () => Promise<void>;
+
+  /**
+  * @returns {Promise<COSEKey>}
+  */
+  build: () => Promise<COSEKey>;
+
+}
+
+
+export class HeaderMap extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<HeaderMap>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<HeaderMap>;
+
+  /**
+  * @param {Label} algorithm_id
+  */
+  set_algorithm_id: (algorithm_id: Label) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Label>>}
+  */
+  algorithm_id: () => Promise<Optional<Label>>;
+
+  /**
+  * @param {Labels} criticality
+  */
+  set_criticality: (criticality: Labels) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Labels>>}
+  */
+  criticality: () => Promise<Optional<Labels>>;
+
+  /**
+  * @param {Label} content_type
+  */
+  set_content_type: (content_type: Label) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Label>>}
+  */
+  content_type: () => Promise<Optional<Label>>;
+
+  /**
+  * @param {Uint8Array} key_id
+  */
+  set_key_id: (key_id: Uint8Array) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  key_id: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @param {Uint8Array} init_vector
+  */
+  set_init_vector: (init_vector: Uint8Array) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  init_vector: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @param {Uint8Array} partial_init_vector
+  */
+  set_partial_init_vector: (partial_init_vector: Uint8Array) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<Uint8Array>>}
+  */
+  partial_init_vector: () => Promise<Optional<Uint8Array>>;
+
+  /**
+  * @param {CounterSignature} counter_signature
+  */
+  set_counter_signature: (counter_signature: CounterSignature) => Promise<void>;
+
+  /**
+  * @returns {Promise<Optional<CounterSignature>>}
+  */
+  counter_signature: () => Promise<Optional<CounterSignature>>;
+
+  /**
+  * @param {Label} label
+  * @returns {Promise<Optional<CBORValue>>}
+  */
+  header: (label: Label) => Promise<Optional<CBORValue>>;
+
+  /**
+  * @param {Label} label
+  * @param {CBORValue} value
+  * @returns {Promise<void>}
+  */
+  set_header: (label: Label, value: CBORValue) => Promise<void>;
+
+  /**
+  * @returns {Promise<Labels>}
+  */
+  keys: () => Promise<Labels>;
+
+  /**
+  * @returns {Promise<HeaderMap>}
+  */
+  static new: () => Promise<HeaderMap>;
+
+}
+
+
+export class Headers extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<Headers>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<Headers>;
+
+  /**
+  * @returns {Promise<ProtectedHeaderMap>}
+  */
+  protected: () => Promise<ProtectedHeaderMap>;
+
+  /**
+  * @returns {Promise<HeaderMap>}
+  */
+  unprotected: () => Promise<HeaderMap>;
+
+  /**
+  * @param {ProtectedHeaderMap} protected_
+  * @param {HeaderMap} unprotected_
+  * @returns {Promise<Headers>}
+  */
+  static new: (protected_: ProtectedHeaderMap, unprotected_: HeaderMap) => Promise<Headers>;
+
+}
+
+
+export class Int extends Ptr {
+  /**
+  * @param {BigNum} x
+  * @returns {Promise<Int>}
+  */
+  static new: (x: BigNum) => Promise<Int>;
+
+  /**
+  * @param {BigNum} x
+  * @returns {Promise<Int>}
+  */
+  static new_negative: (x: BigNum) => Promise<Int>;
+
+  /**
+  * @param {number} x
+  * @returns {Promise<Int>}
+  */
+  static new_i32: (x: number) => Promise<Int>;
+
+  /**
+  * @returns {Promise<boolean>}
+  */
+  is_positive: () => Promise<boolean>;
+
+  /**
+  * @returns {Promise<Optional<BigNum>>}
+  */
+  as_positive: () => Promise<Optional<BigNum>>;
+
+  /**
+  * @returns {Promise<Optional<BigNum>>}
+  */
+  as_negative: () => Promise<Optional<BigNum>>;
+
+  /**
+  * @returns {Promise<Optional<number>>}
+  */
+  as_i32: () => Promise<Optional<number>>;
+
+}
+
+
+export class Label extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<Label>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<Label>;
+
+  /**
+  * @param {Int} int_value
+  * @returns {Promise<Label>}
+  */
+  static new_int: (int_value: Int) => Promise<Label>;
+
+  /**
+  * @param {string} text
+  * @returns {Promise<Label>}
+  */
+  static new_text: (text: string) => Promise<Label>;
+
+  /**
+  * @returns {Promise<LabelKind>}
+  */
+  kind: () => Promise<LabelKind>;
+
+  /**
+  * @returns {Promise<Optional<Int>>}
+  */
+  as_int: () => Promise<Optional<Int>>;
+
+  /**
+  * @returns {Promise<Optional<string>>}
+  */
+  as_text: () => Promise<Optional<string>>;
+
+  /**
+  * @param {AlgorithmId} id
+  * @returns {Promise<Label>}
+  */
+  static from_algorithm_id: (id: AlgorithmId) => Promise<Label>;
+
+  /**
+  * @param {KeyType} key_type
+  * @returns {Promise<Label>}
+  */
+  static from_key_type: (key_type: KeyType) => Promise<Label>;
+
+  /**
+  * @param {ECKey} ec_key
+  * @returns {Promise<Label>}
+  */
+  static from_ec_key: (ec_key: ECKey) => Promise<Label>;
+
+  /**
+  * @param {CurveType} curve_type
+  * @returns {Promise<Label>}
+  */
+  static from_curve_type: (curve_type: CurveType) => Promise<Label>;
+
+  /**
+  * @param {KeyOperation} key_op
+  * @returns {Promise<Label>}
+  */
+  static from_key_operation: (key_op: KeyOperation) => Promise<Label>;
+
+}
+
+
+export class Labels extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<Labels>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<Labels>;
+
+  /**
+  * @returns {Promise<Labels>}
+  */
+  static new: () => Promise<Labels>;
+
+  /**
+  * @returns {Promise<number>}
+  */
+  len: () => Promise<number>;
+
+  /**
+  * @param {number} index
+  * @returns {Promise<Label>}
+  */
+  get: (index: number) => Promise<Label>;
+
+  /**
+  * @param {Label} elem
+  */
+  add: (elem: Label) => Promise<void>;
+
+}
+
+
+export class PasswordEncryption extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<PasswordEncryption>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<PasswordEncryption>;
+
+  /**
+  * @param {COSEEncrypt0} data
+  * @returns {Promise<PasswordEncryption>}
+  */
+  static new: (data: COSEEncrypt0) => Promise<PasswordEncryption>;
+
+}
+
+
+export class ProtectedHeaderMap extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<ProtectedHeaderMap>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<ProtectedHeaderMap>;
+
+  /**
+  * @returns {Promise<ProtectedHeaderMap>}
+  */
+  static new_empty: () => Promise<ProtectedHeaderMap>;
+
+  /**
+  * @param {HeaderMap} header_map
+  * @returns {Promise<ProtectedHeaderMap>}
+  */
+  static new: (header_map: HeaderMap) => Promise<ProtectedHeaderMap>;
+
+  /**
+  * @returns {Promise<HeaderMap>}
+  */
+  deserialized_headers: () => Promise<HeaderMap>;
+
+}
+
+
+export class PubKeyEncryption extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<PubKeyEncryption>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<PubKeyEncryption>;
+
+  /**
+  * @param {COSEEncrypt} data
+  * @returns {Promise<PubKeyEncryption>}
+  */
+  static new: (data: COSEEncrypt) => Promise<PubKeyEncryption>;
+
+}
+
+
+export class SigStructure extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<SigStructure>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<SigStructure>;
+
+  /**
+  * @returns {Promise<SigContext>}
+  */
+  context: () => Promise<SigContext>;
+
+  /**
+  * @returns {Promise<ProtectedHeaderMap>}
+  */
+  body_protected: () => Promise<ProtectedHeaderMap>;
+
+  /**
+  * @returns {Promise<Optional<ProtectedHeaderMap>>}
+  */
+  sign_protected: () => Promise<Optional<ProtectedHeaderMap>>;
+
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  external_aad: () => Promise<Uint8Array>;
+
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  payload: () => Promise<Uint8Array>;
+
+  /**
+  * @param {ProtectedHeaderMap} sign_protected
+  */
+  set_sign_protected: (sign_protected: ProtectedHeaderMap) => Promise<void>;
+
+  /**
+  * @param {SigContext} context
+  * @param {ProtectedHeaderMap} body_protected
+  * @param {Uint8Array} external_aad
+  * @param {Uint8Array} payload
+  * @returns {Promise<SigStructure>}
+  */
+  static new: (context: SigContext, body_protected: ProtectedHeaderMap, external_aad: Uint8Array, payload: Uint8Array) => Promise<SigStructure>;
+
+}
+
+
+export class SignedMessage extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<SignedMessage>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<SignedMessage>;
+
+  /**
+  * @param {COSESign} cose_sign
+  * @returns {Promise<SignedMessage>}
+  */
+  static new_cose_sign: (cose_sign: COSESign) => Promise<SignedMessage>;
+
+  /**
+  * @param {COSESign1} cose_sign1
+  * @returns {Promise<SignedMessage>}
+  */
+  static new_cose_sign1: (cose_sign1: COSESign1) => Promise<SignedMessage>;
+
+  /**
+  * @param {string} s
+  * @returns {Promise<SignedMessage>}
+  */
+  static from_user_facing_encoding: (s: string) => Promise<SignedMessage>;
+
+  /**
+  * @returns {Promise<string>}
+  */
+  to_user_facing_encoding: () => Promise<string>;
+
+  /**
+  * @returns {Promise<SignedMessageKind>}
+  */
+  kind: () => Promise<SignedMessageKind>;
+
+  /**
+  * @returns {Promise<Optional<COSESign>>}
+  */
+  as_cose_sign: () => Promise<Optional<COSESign>>;
+
+  /**
+  * @returns {Promise<Optional<COSESign1>>}
+  */
+  as_cose_sign1: () => Promise<Optional<COSESign1>>;
+
+}
+
+
+export class TaggedCBOR extends Ptr {
+  /**
+  * @returns {Promise<Uint8Array>}
+  */
+  to_bytes: () => Promise<Uint8Array>;
+
+  /**
+  * @param {Uint8Array} bytes
+  * @returns {Promise<TaggedCBOR>}
+  */
+  static from_bytes: (bytes: Uint8Array) => Promise<TaggedCBOR>;
+
+  /**
+  * @returns {Promise<BigNum>}
+  */
+  tag: () => Promise<BigNum>;
+
+  /**
+  * @returns {Promise<CBORValue>}
+  */
+  value: () => Promise<CBORValue>;
+
+  /**
+  * @param {BigNum} tag
+  * @param {CBORValue} value
+  * @returns {Promise<TaggedCBOR>}
+  */
+  static new: (tag: BigNum, value: CBORValue) => Promise<TaggedCBOR>;
+
+}
+
+
+export enum AlgorithmId {
+  EdDSA = 0,
+  ChaCha20Poly1305 = 1,
+}
+
+
+export enum CBORSpecialType {
+  Bool = 0,
+  Float = 1,
+  Unassigned = 2,
+  Break = 3,
+  Undefined = 4,
+  Null = 5,
+}
+
+
+export enum CBORValueKind {
+  Int = 0,
+  Bytes = 1,
+  Text = 2,
+  Array = 3,
+  Object = 4,
+  TaggedCBOR = 5,
+  Special = 6,
+}
+
+
+export enum CurveType {
+  P256 = 0,
+  P384 = 1,
+  P521 = 2,
+  X25519 = 3,
+  X448 = 4,
+  Ed25519 = 5,
+  Ed448 = 6,
+}
+
+
+export enum ECKey {
+  CRV = 0,
+  X = 1,
+  Y = 2,
+  D = 3,
+}
+
+
+export enum KeyOperation {
+  Sign = 0,
+  Verify = 1,
+  Encrypt = 2,
+  Decrypt = 3,
+  WrapKey = 4,
+  UnwrapKey = 5,
+  DeriveKey = 6,
+  DeriveBits = 7,
+}
+
+
+export enum KeyType {
+  OKP = 0,
+  EC2 = 1,
+  Symmetric = 2,
+}
+
+
+export enum LabelKind {
+  Int = 0,
+  Text = 1,
+}
+
+
+export enum SigContext {
+  Signature = 0,
+  Signature1 = 1,
+  CounterSignature = 2,
+}
+
+
+export enum SignedMessageKind {
+  COSESIGN = 0,
+  COSESIGN1 = 1,
+}
+
+
