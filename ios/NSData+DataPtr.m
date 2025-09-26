@@ -11,7 +11,7 @@
 
 + (NSData *)fromDataPtr:(DataPtr *)ptr {
     NSData* data = [NSData dataWithBytes:ptr->ptr length:ptr->len];
-    dataptr_free(ptr);
+    msl_dataptr_free(ptr);
     return data;
 }
 

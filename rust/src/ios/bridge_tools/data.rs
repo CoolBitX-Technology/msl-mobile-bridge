@@ -6,7 +6,7 @@ pub struct DataPtr {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn free_data_ptr(data_ptr: &mut DataPtr) {
+pub unsafe extern "C" fn msl_free_data_ptr(data_ptr: &mut DataPtr) {
   data_ptr.free();
 }
 
@@ -54,6 +54,6 @@ impl <T:From<T>> IntoOptionDataPtr for Option<T> where DataPtr: From<T>{
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn dataptr_free(data: &mut DataPtr) {
+pub unsafe extern "C" fn msl_dataptr_free(data: &mut DataPtr) {
   data.free();
 }
